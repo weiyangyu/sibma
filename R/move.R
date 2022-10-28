@@ -1,34 +1,33 @@
-#' Update Current Particles
-#'
-#' @param X a list. Each element is a particle ready to be mixed.
-#' @param mixwGB a list. Each element is a particle after \code{X} mixed with
-#' \code{GB}.
-#' @param mixwLB a list. Each element is a particle after \code{X} mixed with
-#' \code{LB}.
-#' @param t_1 logical. If this is the first move step, \code{t_1} should be
-#' \code{TRUE}; otherwise, it should be \code{FALSE}.
-#' @param P_w a list. Each element is a matrix describing the orthogonal
-#' projection matrix onto the corresponding stratum variance.
-#' @param q_new an integer describing how many columns of each element of\code{X}
-#' should be mixed with the corresponding columns of a new particle created from
-#' \code{sibma::create_particle()}.
-#' @param all_two_level logical. If all factors are two levels,
-#' \code{all_two_level} should be \code{TRUE}; otherwise it should be
-#' \code{FALSE}.
-#' @param factor_level a list. Each element is a numeric vector specifying
-#' levels of a factor.
-#' @param total_unit an integer representing the number of total run size in
-#' a full factorial design.
-#' @param unit an integer describing the number of experimental units to be used in a
-#' particle.
-#' @param multiply_len a numeric vector. Each element is used to modify
-#' the value of each column in a model matrix.
-#' @param incidence_matrix a list. Each element is a matrix specifying an
-#' incidence matrix.
-#' @param treatment_effect a list. Each element is a numeric vector specifying
-#' which factors should have the same treatment effect in terms of a certain
-#' incidence matrix. The order of elements in \code{treatment_effect} should be
-#' corresponding to that in \code{incidence_matrix}.
+## Update Current Particles
+## @param X a list. Each element is a particle ready to be mixed.
+## @param mixwGB a list. Each element is a particle after \code{X} mixed with
+## \code{GB}.
+## @param mixwLB a list. Each element is a particle after \code{X} mixed with
+## \code{LB}.
+## @param t_1 logical. If this is the first move step, \code{t_1} should be
+## \code{TRUE}; otherwise, it should be \code{FALSE}.
+## @param P_w a list. Each element is a matrix describing the orthogonal
+## projection matrix onto the corresponding stratum variance.
+## @param q_new an integer describing how many columns of each element of\code{X}
+## should be mixed with the corresponding columns of a new particle created from
+## \code{sibma::create_particle()}.
+## @param all_two_level logical. If all factors are two levels,
+## \code{all_two_level} should be \code{TRUE}; otherwise it should be
+## \code{FALSE}.
+## @param factor_level a list. Each element is a numeric vector specifying
+## levels of a factor.
+## @param total_unit an integer representing the number of total run size in
+## a full factorial design.
+## @param unit an integer describing the number of experimental units to be used in a
+## particle.
+## @param multiply_len a numeric vector. Each element is used to modify
+## the value of each column in a model matrix.
+## @param incidence_matrix a list. Each element is a matrix specifying an
+## incidence matrix.
+## @param treatment_effect a list. Each element is a numeric vector specifying
+## which factors should have the same treatment effect in terms of a certain
+## incidence matrix. The order of elements in \code{treatment_effect} should be
+## corresponding to that in \code{incidence_matrix}.
 move <- function(X, mixwGB, mixwLB, t_1, P_w, q_new, all_two_level,
                  factor_level, total_unit, unit, multiply_len,
                  incidence_matrix, treatment_effect){
@@ -183,28 +182,28 @@ move <- function(X, mixwGB, mixwLB, t_1, P_w, q_new, all_two_level,
   return(X)
 }
 
-#' Update Local best or Global Best Particles
-#'
-#' @param X a list. Each element is a particle after \code{sibma::move()}.
-#' @param LB_0 representing the current local best particles of \code{X}.
-#' @param LB a list representing all \code{LB} particles.
-#' @param evaluate_GB logical. If you want to update the \code{GB} particle,
-#' \code{evaluate_GB} should be \code{TRUE}; otherwise, it should be
-#' \code{FALSE}.
-#' @param factor_number an integer describing the number of factors.
-#' @param P_w a list. Each element is a matrix describing the orthogonal
-#' projection matrix onto the corresponding stratum variance.
-#' @param all_two_level logical. If all factors are two levels,
-#' \code{all_two_level} should be \code{TRUE}; otherwise it should be
-#' \code{FALSE}.
-#' @param factor_level a list. Each element is a numeric vector specifying
-#' levels of a factor.
-#' @param total_unit an integer representing the number of total run size in
-#' a full factorial design.
-#' @param unit an integer describing the number of experimental units to be used in a
-#' particle.
-#' @param multiply_len a numeric vector. Each element is used to modify
-#' the value of each column in a model matrix.
+## Update Local best or Global Best Particles
+##
+## @param X a list. Each element is a particle after \code{sibma::move()}.
+## @param LB_0 representing the current local best particles of \code{X}.
+## @param LB a list representing all \code{LB} particles.
+## @param evaluate_GB logical. If you want to update the \code{GB} particle,
+## \code{evaluate_GB} should be \code{TRUE}; otherwise, it should be
+## \code{FALSE}.
+## @param factor_number an integer describing the number of factors.
+## @param P_w a list. Each element is a matrix describing the orthogonal
+## projection matrix onto the corresponding stratum variance.
+## @param all_two_level logical. If all factors are two levels,
+## \code{all_two_level} should be \code{TRUE}; otherwise it should be
+## \code{FALSE}.
+## @param factor_level a list. Each element is a numeric vector specifying
+## levels of a factor.
+## @param total_unit an integer representing the number of total run size in
+## a full factorial design.
+## @param unit an integer describing the number of experimental units to be used in a
+## particle.
+## @param multiply_len a numeric vector. Each element is used to modify
+## the value of each column in a model matrix.
 evaluation <- function(X, LB_0, LB, evaluate_GB, factor_number, P_w, all_two_level,
                        factor_level, total_unit, unit, multiply_len){
   if(evaluate_GB == TRUE){

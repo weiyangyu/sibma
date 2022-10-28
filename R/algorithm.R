@@ -1,5 +1,5 @@
-#' Check All Elements in a List are Identical
-#' @param a_list a list.
+## Check All Elements in a List are Identical
+## @param a_list a list.
 #' @importFrom utils combn
 all_equal_list <- function(a_list){
   total <- combn(length(a_list), 2)
@@ -11,8 +11,8 @@ all_equal_list <- function(a_list){
   return(ans)
 }
 
-#' Return the Order of a Data Frame of Word-Length Patterns
-#' @param MA_df a data frame containing word-length patterns.
+## Return the Order of a Data Frame of Word-Length Patterns
+## @param MA_df a data frame containing word-length patterns.
 MA_ordering <- function(MA_df){
   n_row <- nrow(MA_df)
   fullset <- 1:n_row
@@ -35,10 +35,10 @@ MA_ordering <- function(MA_df){
   return(ordering)
 }
 
-#' Check Convergence
-#' Check if the word-length patterns calculated from each SIB process are the same.
-#' @param MA_df a list. Each element is a list describing the word-length patterns in
-#' each SIB process.
+## Check Convergence
+## Check if the word-length patterns calculated from each SIB process are the same.
+## @param MA_df a list. Each element is a list describing the word-length patterns in
+## each SIB process.
 check_convergence <- function(MA_df){
   # calculate the number of GB in each SIB_time
   GB_number <- lapply(MA_df, function(i){
@@ -106,6 +106,8 @@ check_convergence <- function(MA_df){
 #' incidence matrix. The order of elements in \code{treatment_effect} should be
 #' corresponding to that in \code{incidence_matrix}.
 #' @examples
+#' library(sibma)
+#'
 #' # For a design with 4 two-level factors, we only want 8 experimental units.
 #' # Besides, we want the design has row-column structure, i.e. we want four experimental
 #' # units have a kind of treatment generated from the first and third factors,

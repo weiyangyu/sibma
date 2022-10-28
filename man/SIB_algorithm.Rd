@@ -79,6 +79,8 @@ corresponding to that in \code{incidence_matrix}.}
 SIB Algorithm
 }
 \examples{
+library(sibma)
+
 # For a design with 4 two-level factors, we only want 8 experimental units.
 # Besides, we want the design has row-column structure, i.e. we want four experimental
 # units have a kind of treatment generated from the first and third factors,

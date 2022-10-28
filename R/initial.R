@@ -1,19 +1,18 @@
-#' Initial step
-#'
-#' @param particle a list containing all particles.
-#' @param all_two_level logical. If all factors are two levels,
-#' \code{all_two_level} should be \code{TRUE}; otherwise it should be
-#' \code{FALSE}.
-#' @param P_w a list. Each element is a matrix describing the orthogonal
-#' projection matrix onto the corresponding stratum variance.
-#' @param factor_level a list. Each element is a numeric vector specifying
-#' levels of a factor.
-#' @param total_unit an integer representing the number of total run size in a
-#' full factorial design.
-#' @param unit an integer describing the number of experimental units to be used in a
-#' particle.
-#' @param multiply_len a numeric vector. Each element is used to modify
-#' the value of each column in a model matrix.
+## Initial step
+## @param particle a list containing all particles.
+## @param all_two_level logical. If all factors are two levels,
+## \code{all_two_level} should be \code{TRUE}; otherwise it should be
+## \code{FALSE}.
+## @param P_w a list. Each element is a matrix describing the orthogonal
+## projection matrix onto the corresponding stratum variance.
+## @param factor_level a list. Each element is a numeric vector specifying
+## levels of a factor.
+## @param total_unit an integer representing the number of total run size in a
+## full factorial design.
+## @param unit an integer describing the number of experimental units to be used in a
+## particle.
+## @param multiply_len a numeric vector. Each element is used to modify
+## the value of each column in a model matrix.
 initial <- function(particle, all_two_level, P_w, factor_level,
                     total_unit, unit, multiply_len){
   factor_number <- ncol(particle[[1]])
