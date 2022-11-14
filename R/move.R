@@ -6,8 +6,9 @@
 ## \code{LB}.
 ## @param t_1 logical. If this is the first move step, \code{t_1} should be
 ## \code{TRUE}; otherwise, it should be \code{FALSE}.
-## @param P_w a list. Each element is a matrix describing the orthogonal
-## projection matrix onto the corresponding stratum variance.
+## @param P_w a nested list. The largest list is composed of smaller lists in which
+## each element is a matrix describing the orthogonal projection matrix onto
+## the corresponding stratum variance.
 ## @param q_new an integer describing how many columns of each element of\code{X}
 ## should be mixed with the corresponding columns of a new particle created from
 ## \code{sibma::create_particle()}.

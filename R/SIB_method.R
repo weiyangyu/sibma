@@ -3,8 +3,9 @@
 ## Find the global best and local best particles from a particle pool.
 ##
 ## @param X a list of particles.
-## @param P_w a list. Each element is a matrix describing the orthogonal
-## projection matrix onto the corresponding stratum variance.
+## @param P_w a nested list. The largest list is composed of smaller lists in which
+## each element is a matrix describing the orthogonal projection matrix onto
+## the corresponding stratum variance.
 ## @param q_GB an integer describing how many columns of a particle
 ## should be mixed with the corresponding columns of \code{GB}.
 ## @param q_LB an integer describing how many columns of a particle

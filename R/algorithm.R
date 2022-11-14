@@ -69,7 +69,33 @@ check_convergence <- function(MA_df){
   return(result)
 }
 
-#' SIB Algorithm
+
+
+
+#' SIBMA
+#'
+#' Use swarm intelligence algorithm to search for optimal designs which satisfy the
+#' corresponding minimum aberration criterion.
+#'
+#' \code{SIBMA} works by constructing several SIB processes which controlled by
+#' \code{SIB_time}. Each SIB process will create several particles, then select
+#' the best particles that satisfy the corresponding minimum aberration criterion.
+#' Therefore, users have to define \code{factor_level}, \code{unit}, and
+#' \code{particle_number} to create particles. If the level of factors are not
+#' all two-level, we have to transform those particles into their corresponding
+#' orthogonal matrices, so users have to specify \code{all_two_level}.
+#' The orthogonal matrices will be orthonormal, but \code{stats::model.matrix()}
+#' which we use to construct a model matrix will not consider factors' intercept
+#' effects, so users have to specify \code{multiply_len} to add factors' intercept
+#' effects. Users also have to specify minimum aberration criteria which controlled by
+#' \code{P_w}, and users can refer to \code{example} down below to see how to create
+#' a legitimate format of \code{P_w}. Moreover, if the structure of designs has
+#' effects, such as row and column effects, users have to define \code{structure_matrix}
+#' and \code{treatment_effect}.
+#'
+#'
+#'
+#'
 #' @param factor_level a list. Each element is a numeric vector specifying
 #' levels of a factor.
 #' @param unit an integer describing the number of experimental units to be
@@ -77,12 +103,12 @@ check_convergence <- function(MA_df){
 #' @param particle_number an integer indicating the initial particle number. Default is 10.
 #' @param particle_increase an integer indicating how many particle number
 #' you would like to increase in a sequential way. Default is 10.
-#' @param SIB_time an integer indicating the number of SIB process you would
+#' @param SIB_time an integer indicating the number of SIB processes you would
 #' like to run. Default is 3.
 #' @param all_two_level logical. If all factors are two levels,
 #' \code{all_two_level} should be \code{TRUE}; otherwise it should be
 #' \code{FALSE}.
-#' @param P_w a nested list. The larger list is composed of smaller list in which
+#' @param P_w a nested list. The largest list is composed of smaller lists in which
 #' each element is a matrix describing the orthogonal projection matrix onto
 #' the corresponding stratum variance.
 #' @param q_GB an integer describing how many columns of a particle
@@ -99,12 +125,28 @@ check_convergence <- function(MA_df){
 #' the value of each column in a model matrix.
 #' @param t_increase an integer indicating the increased iteration number
 #' you would like to increase in a sequential way. Default is 10.
-#' @param incidence_matrix a list. Each element is a matrix specifying an
+#' @param structure_matrix a list. Each element is a matrix specifying an
 #' incidence matrix.
 #' @param treatment_effect a list. Each element is a numeric vector specifying
 #' which factors should have the same treatment effect in terms of a certain
 #' incidence matrix. The order of elements in \code{treatment_effect} should be
-#' corresponding to that in \code{incidence_matrix}.
+#' corresponding to that in \code{structure_matrix}.
+#' @return
+#' A list containing three elements:
+#' \describe{
+#' \item{testSIB}{A list in which each element represents the result of
+#' each \code{SIB_time}. The result of each \code{SIB_time} contains 'X', 'LB',
+#' 'GB', 'GBMA', 'U'. 'X' denotes all the particles. 'LB' denotes the local best particles for
+#' 'X'. 'GB' denotes the global best particles. 'GBMA' denotes the word-length
+#' patterns of 'GB' in each \code{P_w}. 'U' denotes the model matrices of 'GB'.}
+#' \item{history}{'n_particle' and 'iteration' record the cumulative number of particles and
+#' the cumulative number of iterations being used in the corresponding sequence.}
+#' \item{MA_df}{The largest list contains the global best designs'
+#' word-length patterns generated from each \code{SIB_time}. The second largest
+#' list contains the global best designs' word-length patterns in each
+#' \code{P_w}.}
+#' }
+#'
 #' @examples
 #' library(sibma)
 #'
@@ -134,20 +176,20 @@ check_convergence <- function(MA_df){
 #'
 #' P_w <- list(P_w1, P_w2, P_w3, P_w4)
 #'
-#' SIB_algorithm(factor_level = list(c(-1,1), c(-1,1), c(-1,1), c(-1,1)),
-#'               unit = 8, particle_number = 10,
-#'               particle_increase = 10,
-#'               SIB_time = 3, all_two_level = TRUE, P_w = P_w, q_GB = 1, q_LB = 1,
-#'               q_new = 1, t = 10, total_unit = 16, multiply_len = rep(1/sqrt(2)^4, 16),
-#'               t_increase = 10, incidence_matrix = list(F2, F3),
-#'               treatment_effect = list(c(1,3), c(2,4)))
+#' SIBMA(factor_level = list(c(-1,1), c(-1,1), c(-1,1), c(-1,1)),
+#'       unit = 8, particle_number = 10,
+#'       particle_increase = 10,
+#'       SIB_time = 3, all_two_level = TRUE, P_w = P_w, q_GB = 1, q_LB = 1,
+#'       q_new = 1, t = 10, total_unit = 16, multiply_len = rep(1/sqrt(2)^4, 16),
+#'       t_increase = 10, structure_matrix = list(F2, F3),
+#'       treatment_effect = list(c(1,3), c(2,4)))
 #'
 #' @export
-SIB_algorithm <- function(factor_level, unit, particle_number = 10,
-                          particle_increase = 10,
-                          SIB_time = 3, all_two_level, P_w, q_GB = 1, q_LB = 1,
-                          q_new = 1, t = 10, total_unit, multiply_len,
-                          t_increase = 10, incidence_matrix, treatment_effect){
+SIBMA <- function(factor_level, unit, particle_number = 10,
+                  particle_increase = 10,
+                  SIB_time = 3, all_two_level, P_w,
+                  q_GB = 1, q_LB = 1, q_new = 1, t = 10, total_unit, multiply_len,
+                  t_increase = 10, structure_matrix, treatment_effect){
   ##################
   a <- 0
   b <- 0 ## the number of convergence occurred
@@ -159,7 +201,7 @@ SIB_algorithm <- function(factor_level, unit, particle_number = 10,
                        all_two_level = all_two_level, P_w = P_w, q_GB = q_GB,
                        q_LB = q_LB, q_new = q_new, t = t, total_unit = total_unit,
                        multiply_len = multiply_len,
-                       incidence_matrix = incidence_matrix,
+                       incidence_matrix = structure_matrix,
                        treatment_effect = treatment_effect)
   current_SIB <- SXTY_SIB
 
@@ -176,7 +218,7 @@ SIB_algorithm <- function(factor_level, unit, particle_number = 10,
                                         t = t_increase,
                                         total_unit = total_unit,
                                         multiply_len = multiply_len,
-                                        incidence_matrix = incidence_matrix,
+                                        incidence_matrix = structure_matrix,
                                         treatment_effect = treatment_effect)
       # reorder
       reorder_current <- lapply(current_SIB$MA_df, function(i){
@@ -212,7 +254,7 @@ SIB_algorithm <- function(factor_level, unit, particle_number = 10,
                                    t = t_increase,
                                    total_unit = total_unit,
                                    multiply_len = multiply_len,
-                                   incidence_matrix = incidence_matrix,
+                                   incidence_matrix = structure_matrix,
                                    treatment_effect = treatment_effect)
         ## update current status
         current_SIB <- SXTY_SIB
@@ -264,7 +306,7 @@ SIB_algorithm <- function(factor_level, unit, particle_number = 10,
                                t = t_increase,
                                total_unit = total_unit,
                                multiply_len = multiply_len,
-                               incidence_matrix = incidence_matrix,
+                               incidence_matrix = structure_matrix,
                                treatment_effect = treatment_effect)
     ## update current status
     current_SIB <- SXTY_SIB
