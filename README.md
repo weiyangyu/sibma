@@ -1,6 +1,6 @@
 # sibma
-It is a R package using swarm intelligence based PSO to search global best experimental designs in the context of fractional 
-factorial experimental design. We use minimum aberration as a criteria.
+It is an R package using the swarm intelligence algorithm to search for optimal multi-stratum fractional factorial experimental designs. We use the minimum aberration criterion given by Chang and Cheng (2018).
+
 ## How to install?
 ### Step 1: Install the devtools package
 install.packages("devtools")
